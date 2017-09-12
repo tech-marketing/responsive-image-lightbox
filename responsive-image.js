@@ -51,16 +51,20 @@
          * @param $content
          */
         var appendContentElements = function($content) {
-            $content.wrap(function() {
-                return '<div class="rs-img-bg" style="display:none; background-color: ' + defaultOptions.background + '"></div>';
-            });
 
-            $content.addClass('rs-content-wrapper').css('display','none')
-                .css('background-color', defaultOptions.contentBg)
-                .css('padding',defaultOptions.contentPadding + 'px');
+            if(!instance) {
+                $content.wrap(function() {
+                    return '<div class="rs-img-bg" style="display:none; background-color: ' + defaultOptions.background + '"></div>';
+                });
 
-            $content.closest('.rs-img-bg').append(defaultOptions.loaderElement);
-            instance = $content.closest('.rs-img-bg');
+                $content.addClass('rs-content-wrapper').css('display','none')
+                    .css('background-color', defaultOptions.contentBg)
+                    .css('padding',defaultOptions.contentPadding + 'px');
+
+                $content.closest('.rs-img-bg').append(defaultOptions.loaderElement);
+                instance = $content.closest('.rs-img-bg');
+            }
+
             $(instance).fadeIn();
 
         };
@@ -93,8 +97,12 @@
          * Reset the plugin - remove all saved data and listeners
          */
         var resetAll = function() {
-            $(instance).remove();
-            instance = null;
+
+            if(!defaultOptions.onlyShowContent) {
+                $(instance).remove();
+                instance = null;
+            }
+
             imageNaturalHeight = null;
             imageNaturalWidth = null;
             removeListeners();
