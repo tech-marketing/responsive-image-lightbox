@@ -17,6 +17,7 @@
             contentBg: '#fff',              //Background Color of the Content background
             contentPadding: '10',           //Content Padding size in pixels
             loaderElement: '<i class="fa fa-spinner rs-loader-spinner" aria-hidden="true"></i>',
+            onlyShowContent: false          //If true - Don't generate new popup element, use existing one add just add loader and classes
         };
 
         var instance = null; //instance of the popup element
@@ -28,20 +29,40 @@
 
         /**
          * Create Html Element with the inside html of the passing content
+         * Only if defaultOptions.onlyShowContent is false, otherwise use the content element itself and just append classes
          */
         var createPopupElement = function () {
 
             var popupHtml = [
                 '<div class="rs-img-bg" style="display:none; background-color: ' + defaultOptions.background + '">',
-                    defaultOptions.loaderElement,
-                    '<div class="rs-content-wrapper" style="display:none; background-color: ' +
-                        defaultOptions.contentBg + '; padding: ' + defaultOptions.contentPadding + 'px">',
-                        $content.html(),
-                    '</div>',
+                defaultOptions.loaderElement,
+                '<div class="rs-content-wrapper" style="display:none; background-color: ' +
+                defaultOptions.contentBg + '; padding: ' + defaultOptions.contentPadding + 'px">',
+                $content.html(),
+                '</div>',
                 '</div>'].join('');
 
             instance = $(popupHtml).appendTo($(defaultOptions.root));
             $(instance).fadeIn();
+        };
+
+        /**
+         * Don't generate new popup element, use existing one just wrap with the background and add classes and loader
+         * @param $content
+         */
+        var appendContentElements = function($content) {
+            $content.wrap(function() {
+                return '<div class="rs-img-bg" style="display:none; background-color: ' + defaultOptions.background + '"></div>';
+            });
+
+            $content.addClass('rs-content-wrapper').css('display','none')
+                .css('background-color', defaultOptions.contentBg)
+                .css('padding',defaultOptions.contentPadding + 'px');
+
+            $content.closest('.rs-img-bg').append(defaultOptions.loaderElement);
+            instance = $content.closest('.rs-img-bg');
+            $(instance).fadeIn();
+
         };
 
         /**
@@ -54,8 +75,11 @@
             if(instance) {
                 resetAll();
             }
-
-            createPopupElement($content);
+            if(defaultOptions.onlyShowContent) {
+                appendContentElements($content);
+            } else {
+                createPopupElement($content);
+            }
 
             setImageNaturalSizes(function(){
                 setListeners();
@@ -124,8 +148,8 @@
          * Fade in the popup instance content and hide the preloader
          */
         var showPopup = function() {
-          $(instance).find('.rs-loader-spinner').hide();
-          $(instance).find('.rs-content-wrapper').fadeIn();
+            $(instance).find('.rs-loader-spinner').hide();
+            $(instance).find('.rs-content-wrapper').fadeIn();
         };
 
         /**
@@ -136,12 +160,16 @@
 
             //if the event is keyup and it's different then the esc button, do nothing
             if(event.type === "keyup" && event.keyCode !== 27) {
-                    return;
+                return;
             }
 
-            $(instance).fadeOut(400, function(){
-                resetAll();
-            });
+            //if the click event has been on the background - close the popup
+            if(event.target === this) {
+                $(instance).fadeOut(400, function(){
+                    resetAll();
+                });
+            }
+
         };
 
         /**
@@ -155,9 +183,6 @@
             //clear on the instance listener
             $(instance).on('click',closePopup);
 
-            //stop click on content propagation
-            $(instance).find('.rs-content-wrapper').on('click',contentPropRemove);
-
             //listen to esc button
             $(document).on('keyup',closePopup);
 
@@ -170,16 +195,7 @@
         var removeListeners = function() {
             $(window).off('resize',updateContentSize);
             $(instance).off('click',closePopup);
-            $(instance).find('.rs-content-wrapper').off('click',contentPropRemove);
             $(document).off('keyup',closePopup);
-        };
-
-        /**
-         * Remove Content Propagation for the events
-         * @param event
-         */
-        var contentPropRemove = function(event) {
-            event.stopPropagation();
         };
 
         /**
@@ -201,7 +217,6 @@
             //bind click event
             element.click(function(){
                 openPopup($content);
-                setListeners();
             });
         };
 

@@ -38,6 +38,7 @@ defaultOptions = {
     contentBg: '#fff',              //Background Color of the Content background
     contentPadding: '10',           //Content Padding size in pixels
     loaderElement: '<i class="fa fa-spinner rs-loader-spinner" aria-hidden="true"></i>',
+    onlyShowContent: false          //If true - Don't generate new popup element, use existing one add just add loader and classes
 };
 ````
 
