@@ -1,4 +1,4 @@
-.rs-img-bg, .rs-loader{
+.rs-img-bg{
     position: fixed;
     top:0;
     right:0;
@@ -7,6 +7,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 10000;
 }
 
 .rs-img-bg .rs-content-wrapper{

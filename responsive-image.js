@@ -107,6 +107,13 @@
 
             var ratio = Math.min(( maxWidth/ imageNaturalWidth), ( maxHeight/ imageNaturalHeight));
 
+            if(ratio > 1) {
+                return {
+                    width: imageNaturalWidth,
+                    height: imageNaturalHeight
+                }
+            }
+
             return {
                 width: imageNaturalWidth * ratio,
                 height: imageNaturalHeight * ratio

@@ -14,7 +14,7 @@
     <img src="http://lorempixel.com/300/300/" class="img" />
 
     <div id="popup" style="display: none">
-        <img src="http://lorempixel.com/1000/600/" />
+        <img src="http://lorempixel.com/1200/1000/" />
         <h4>text below the image</h4>
     </div>
 
