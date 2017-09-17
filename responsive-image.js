@@ -53,15 +53,19 @@
         var appendContentElements = function($content) {
 
             if(!instance) {
-                $content.wrap(function() {
-                    return '<div class="rs-img-bg" style="display:none; background-color: ' + defaultOptions.background + '"></div>';
-                });
+                if($content.closest('.rs-img-bg').length == 0) {
 
-                $content.addClass('rs-content-wrapper').css('display','none')
-                    .css('background-color', defaultOptions.contentBg)
-                    .css('padding',defaultOptions.contentPadding + 'px');
+                    $content.wrap(function() {
+                        return '<div class="rs-img-bg" style="display:none; background-color: ' + defaultOptions.background + '"></div>';
+                    });
 
-                $content.closest('.rs-img-bg').append(defaultOptions.loaderElement);
+                    $content.addClass('rs-content-wrapper').css('display','none')
+                        .css('background-color', defaultOptions.contentBg)
+                        .css('padding',defaultOptions.contentPadding + 'px');
+
+                    $content.closest('.rs-img-bg').append(defaultOptions.loaderElement);
+                }
+
                 instance = $content.closest('.rs-img-bg');
             }
 
@@ -141,14 +145,14 @@
 
             if(ratio > 1) {
                 return {
-                    width: imageNaturalWidth,
-                    height: imageNaturalHeight
+                    width: imageNaturalWidth + (defaultOptions.contentPadding * 2),
+                    height: imageNaturalHeight + (defaultOptions.contentPadding * 2)
                 }
             }
 
             return {
-                width: imageNaturalWidth * ratio,
-                height: imageNaturalHeight * ratio
+                width: imageNaturalWidth * ratio + (defaultOptions.contentPadding * 2),
+                height: imageNaturalHeight * ratio + (defaultOptions.contentPadding * 2)
             };
         };
 
