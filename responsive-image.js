@@ -180,6 +180,7 @@
                 $(instance).fadeOut(400, function(){
                     resetAll();
                 });
+                $content.trigger('hide.resImage');
             }
 
         };
@@ -229,6 +230,7 @@
             //bind click event
             element.click(function(){
                 openPopup($content);
+                $content.trigger('show.resImage');
             });
         };
 
