@@ -1,7 +1,7 @@
 # responsive-image-lightbox
 A lightbox that adjusts its size to fit the image of a containing image - but allows other elements as well
 
-##installation
+## installation
 Include Responsive Image scripts and styling and jQuery library:
 ```html
 <link rel="stylesheet" href="responsive-image.min.css">
@@ -9,7 +9,7 @@ Include Responsive Image scripts and styling and jQuery library:
 <script src="responsive-image.js"></script> 
 ```
 
-##usage
+## usage
 Initialize Responsive Image on every jQuery element, and passing jQuery element that click on this element will open. example:
 
 ````html
@@ -27,7 +27,7 @@ Initialize Responsive Image on every jQuery element, and passing jQuery element 
 
 This code will add click event on the image and when the click event will be fired it will open the popup content
 
-##options
+## options
 ````javascript
 defaultOptions = {
     selector: 'img',                //Selector of the image that will be responsive by it (if there is more then one image)
